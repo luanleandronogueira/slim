@@ -1,8 +1,58 @@
 <?php
 
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 require 'vendor/autoload.php';
 
 $app = new \Slim\App;
+
+// Padrão PSR7
+$app->get('/postagens', function (Request $request, Response $response){
+
+    // Padrão de resposta PSR7
+    $response->getBody()->write("Lista de Postagens");
+
+    return;
+});
+
+// Padrão PSR7
+$app->post('/usuarios/adiciona', function (Request $request, Response $response){
+
+    // Padrão de resposta PSR7
+    $post = $request->getParsedBody();
+    $nome = $post['nome'];
+    $email = $post['email'];
+
+    return $response->getBody()->write($nome . " - " . $email);
+
+});
+
+// Padrão PSR7
+$app->put('/usuarios/atualiza/{id}', function (Request $request, Response $response){
+
+    // Padrão de resposta PSR7
+    $post = $request->getParsedBody();
+    $id = $post['id'];
+    $nome = $post['nome'];
+    $email = $post['email'];
+
+    // Atualizar no banco de dados
+
+    return $response->getBody()->write("Sucesso ao Atualizar " . $id);
+
+});
+
+// Padrão PSR7
+$app->delete('/usuarios/remove/{id}', function (Request $request, Response $response){
+
+    // Padrão de resposta PSR7
+    $id = $request->getAttribute('id');
+
+    // deletar no banco de dados
+
+    return $response->getBody()->write( "Sucesso ao deletar" );
+
+});
 
 $app->get('/postagens', function (){
 
@@ -45,13 +95,6 @@ $app->get('/blog/postagens/{id}', function ($request, $response){
 
 })->setName("blog");
 
-// $app->get('/meublog', function ($request, $response){
-
-//     $retorno = $this->get("router")->pathFor("blog", ["id" => "5"] );
-
-//     echo $retorno;
-
-// });
 
 $app->get('/meublog', function($request, $response){
 	
@@ -76,3 +119,7 @@ $app->group('/v5', function(){
 
 
 $app->run();
+
+
+
+
